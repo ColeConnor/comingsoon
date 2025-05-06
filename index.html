@@ -265,13 +265,36 @@
                 flex-direction: column;
             }
         }
+        
+        .notification-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .notification-message.success {
+            background-color: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+        
+        .notification-message.error {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo">
-                <img src="images/logo5.png" alt="RevealThis Logo" class="logo">
+                <svg width="50" height="50" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M60 40H140C155 40 165 55 160 70L140 130C135 145 120 155 105 155H50C35 155 25 140 30 125L50 65C55 50 70 40 85 40H100" stroke="#333" stroke-width="15" fill="#7c3aed"/>
+                    <circle cx="130" cy="80" r="20" fill="#333"/>
+                    <path d="M150 40L170 60" stroke="#d4d4d4" stroke-width="8" stroke-linecap="round"/>
+                </svg>
+                <h1>RevealThis</h1>
             </div>
         </header>
         
@@ -280,14 +303,16 @@
                 <h2>COMING<br>SOON</h2>
                 <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 500px; opacity: 0.8;">Get ready for a new way to monetize your digital content. Sign up now to be notified when we launch.</p>
                 
-        <form class="email-capture" id="notify-form" action="https://[YOUR-MAILCHIMP-DC].api.mailchimp.com/3.0/lists/[YOUR-LIST-ID]/members/" method="POST">
-                    <input type="email" name="email" class="email-input" placeholder="Enter your email address" required>
-                    <input type="hidden" name="status" value="subscribed">
+                <form class="email-capture" id="notify-form" action="https://https://us3.admin.mailchimp.com.list-manage.com/subscribe/post?u=f0686335162d4d742a7ed70b6480c76c-us3&amp;id=bda4589de2" method="post" target="_blank">
+                    <input type="email" name="EMAIL" class="email-input" placeholder="Enter your email address" required>
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                        <input type="text" name="b_[YOUR-USER-ID]_[YOUR-LIST-ID]" tabindex="-1" value="">
+                    </div>
                     <button type="submit" class="notify-btn">Get Notified</button>
                 </form>
             </div>
             <div class="phone-mockup">
-                <img src="images/revealphone2.png" alt="RevealThis App Preview">
+                <img src="/api/placeholder/300/600" alt="RevealThis App Preview">
             </div>
         </div>
         
@@ -305,129 +330,37 @@
     </div>
     
     <script>
-        // Mailchimp submission handler with API integration
         document.getElementById('notify-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = e.target.querySelector('.email-input').value;
             const form = this;
+            const email = form.querySelector('.email-input').value;
             
-            // Replace these with your actual Mailchimp API details
-            const mailchimpURL = this.action;
-            const apiKey = 'YOUR-API-KEY';
+            // Submit form to Mailchimp
+            form.submit();
             
-            // Prepare data for Mailchimp
-            const data = {
-                email_address: email,
-                status: 'subscribed'
-                // You can add more fields like FNAME, LNAME, etc. if needed
-            };
-            
-            // Send data to Mailchimp
-            fetch(mailchimpURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `apikey ${apiKey}`
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                } else if (response.status === 400) {
-                    // Usually means the email is already subscribed
-                    return response.json().then(data => {
-                        if (data.title === 'Member Exists') {
-                            throw new Error('You\'re already subscribed!');
-                        } else {
-                            throw new Error('There was an error subscribing. Please try again.');
-                        }
-                    });
-                } else {
-                    throw new Error('There was an error subscribing. Please try again.');
-                }
-            })
-            .then(data => {
-                showMessage('Thank you! We\'ll notify you when RevealThis launches.', 'success');
-                form.reset();
-            })
-            .catch(error => {
-                showMessage(error.message, 'error');
-            });
+            // Show success message
+            showMessage('Thank you! We\'ll notify you when RevealThis launches.', 'success');
+            form.reset();
         });
         
-        // Function to show success or error messages
         function showMessage(message, type) {
-            // Remove any existing messages
             const existingMessages = document.querySelectorAll('.notification-message');
             existingMessages.forEach(msg => msg.remove());
             
-            // Create new message element
             const msgElement = document.createElement('div');
-            msgElement.className = 'notification-message';
+            msgElement.className = `notification-message ${type}`;
             msgElement.textContent = message;
             
-            // Style based on message type
-            if (type === 'success') {
-                msgElement.style.backgroundColor = 'rgba(46, 213, 115, 0.2)';
-                msgElement.style.color = '#2ed573';
-            } else {
-                msgElement.style.backgroundColor = 'rgba(255, 71, 87, 0.2)';
-                msgElement.style.color = '#ff4757';
-            }
-            
-            // Apply common styles
-            msgElement.style.padding = '1rem';
-            msgElement.style.borderRadius = '10px';
-            msgElement.style.marginTop = '1rem';
-            msgElement.style.textAlign = 'center';
-            msgElement.style.fontWeight = 'bold';
-            
-            // Add the message after the form
+            msgElement.style.opacity = '1';
             const form = document.getElementById('notify-form');
             form.parentNode.insertBefore(msgElement, form.nextSibling);
             
-            // Remove message after 5 seconds
             setTimeout(() => {
                 msgElement.style.opacity = '0';
                 msgElement.style.transition = 'opacity 0.5s ease';
                 setTimeout(() => msgElement.remove(), 500);
             }, 5000);
         }
-        
-        // Alternative Mailchimp integration using embedded form
-        // Uncomment and use this if the API approach doesn't work for you
-        /*
-        window.addEventListener('DOMContentLoaded', function() {
-            const MAILCHIMP_URL = '//[YOUR-MAILCHIMP-DC].list-manage.com/subscribe/post?u=[YOUR-USER-ID]&amp;id=[YOUR-LIST-ID]';
-            
-            const form = document.getElementById('notify-form');
-            form.action = MAILCHIMP_URL;
-            form.method = 'post';
-            form.target = '_blank';
-            
-            // Add name attribute required by Mailchimp
-            const emailInput = form.querySelector('.email-input');
-            emailInput.name = 'EMAIL';
-            
-            // Add honeypot field to prevent spam
-            const honeypot = document.createElement('div');
-            honeypot.style.position = 'absolute';
-            honeypot.style.left = '-5000px';
-            honeypot.ariaHidden = 'true';
-            
-            const honeypotInput = document.createElement('input');
-            honeypotInput.type = 'text';
-            honeypotInput.name = 'b_[YOUR-USER-ID]_[YOUR-LIST-ID]';
-            honeypotInput.tabIndex = '-1';
-            honeypotInput.value = '';
-            
-            honeypot.appendChild(honeypotInput);
-            form.appendChild(honeypot);
-            
-            // Submit will now go directly to Mailchimp
-        });
-        */
     </script>
 </body>
 </html>
