@@ -1,0 +1,65 @@
+/* Reset and base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background: linear-gradient(to bottom, #b98ee0, #f1efff);
+  color: #1e1e1e;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+  padding: 40px 20px;
+}
+
+header .logo {
+  width: 140px;
+  margin-bottom: 20px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+main .content h1 {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cta {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta:hover {
+  background-color: #e85c4f;
+}
+
+.mockup img {
+  width: 260px;
+  max-width: 80%;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #555;
+}
