@@ -289,7 +289,7 @@
     <div class="container">
         <header>
             <div class="logo">
-                <img src="images/logo5.png" alt="RevealThis App Preview">
+                <img src="images/logo5.png" alt="RevealThis Logo">
             </div>
         </header>
         
@@ -298,10 +298,10 @@
                 <h2>COMING<br>SOON</h2>
                 <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 500px; opacity: 0.8;">Get ready for a new way to monetize your digital content. Sign up now to be notified when we launch.</p>
                 
-                <form class="email-capture" id="notify-form" action="https://us3.list-manage.com/subscribe/post?u=44245b81c1ae1adfd10bd260a47b60b6" method="post" target="_blank">
+                <form class="email-capture" id="notify-form" action="https://us3.list-manage.com/subscribe/post?u=87086620ca0968d77bdde8022e71fe01&id=bda4589de2" method="post">
                     <input type="email" name="EMAIL" class="email-input" placeholder="Enter your email address" required>
                     <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                        <input type="text" name="b_f0686335162d4d742a7ed70b6480c76c_bda4589de2" tabindex="-1" value="">
+                        <input type="text" name="b_87086620ca0968d77bdde8022e71fe01_bda4589de2" tabindex="-1" value="">
                     </div>
                     <button type="submit" class="notify-btn">Get Notified</button>
                 </form>
@@ -326,16 +326,20 @@
     
     <script>
         document.getElementById('notify-form').addEventListener('submit', function(e) {
-            e.preventDefault();
             const form = this;
             const email = form.querySelector('.email-input').value;
             
-            // Submit form to Mailchimp
-            form.submit();
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
             
-            // Show success message
+            // Show success message and reset form
             showMessage('Thank you! We\'ll notify you when RevealThis launches.', 'success');
-            form.reset();
+            setTimeout(() => form.reset(), 1000);
         });
         
         function showMessage(message, type) {
